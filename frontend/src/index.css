@@ -1,0 +1,114 @@
+/* Overall background style */
+body {
+    font-family: 'Roboto', sans-serif; /* Google font */
+    background: linear-gradient(to right, #ff7e5f, #feb47b, #ffdea2, #ffffff); /* Colorful gradient background */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Main container styles */
+  .container {
+    max-width: 500px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Light gray background */
+  }
+  
+  /* Heading styles */
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333; /* Dark gray text color */
+  }
+  
+  /* Form group styles */
+  .form-group {
+    margin-bottom: 20px; /* Adjusted to match spacing */
+  }
+  
+  /* Form input styles */
+  .form-control {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 10px;
+  }
+  
+  /* Button styles */
+  button[type="submit"],
+  .action-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #007bff; /* Blue background */
+    color: #fff; /* White text color */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+  }
+  
+  button[type="submit"]:hover,
+  .action-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+  }
+  
+  /* Loader styles */
+  .loader-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .status {
+    margin-top: 10px;
+  }
+  
+  /* Error message styles */
+  .error-message {
+    color: #ff0000;
+    margin-top: 10px;
+  }
+  
+  /* Text container styles */
+  .text-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Spinner styles */
+  .spinner {
+    --d: 24.6px;
+    width: 4.5px;
+    height: 4.5px;
+    border-radius: 50%;
+    color: #474bff;
+    box-shadow: calc(1*var(--d)) calc(0*var(--d)) 0 0,
+                calc(0.707*var(--d)) calc(0.707*var(--d)) 0 1.1px,
+                calc(0*var(--d)) calc(1*var(--d)) 0 2.2px,
+                calc(-0.707*var(--d)) calc(0.707*var(--d)) 0 3.4px,
+                calc(-1*var(--d)) calc(0*var(--d)) 0 4.5px,
+                calc(-0.707*var(--d)) calc(-0.707*var(--d)) 0 5.6px,
+                calc(0*var(--d)) calc(-1*var(--d)) 0 6.7px;
+    animation: spinner-a90wxe 1s infinite steps(8);
+  }
+  
+  @keyframes spinner-a90wxe {
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+  
+  /* Background animation */
+  @keyframes bg-animation {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
