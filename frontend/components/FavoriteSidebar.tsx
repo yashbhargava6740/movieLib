@@ -4,14 +4,11 @@ import FavCard from './FavCard';
 
 export const FavoriteSidebar = () => {
   const { favorites, fetchFavorites } = useMovieStore();
-
   React.useEffect(() => {
     fetchFavorites();
   }, []);
 
-  React.useEffect(() => {
-    console.log(favorites);
-  }, [favorites]);
+ 
 
   return (
     <>

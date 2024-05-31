@@ -5,12 +5,10 @@ import { handleFavorite } from '../actions/action.js';
 const MovieCard = ({ movie }: any) => {
   const { fetchFavorites, favorites } = useMovieStore();
   const [loading, setLoading] = React.useState(false);
-
-  const isFavorite = Array.isArray(favorites) && favorites.some((item: any) => item.imdbID === movie.imdbID);
-
+  const isFavorite = favorites.some((item: any) => item.imdbID === movie.imdbID);
+  // console.log(isFavorite);
   const handleClick = async () => {
     setLoading(true);
-
     await handleFavorite(movie.imdbID, isFavorite ? 'remove' : 'add')
       .then(() => fetchFavorites())
       .finally(() => setLoading(false));
