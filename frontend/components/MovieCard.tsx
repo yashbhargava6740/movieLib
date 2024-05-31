@@ -1,13 +1,18 @@
 import React from 'react';
 import { useMovieStore } from '../src/zstand/store.js';
 import { handleFavorite } from '../actions/action.js';
+import { useNavigate } from 'react-router-dom';
 
 const MovieCard = ({ movie }: any) => {
   const { fetchFavorites, favorites } = useMovieStore();
   const [loading, setLoading] = React.useState(false);
   const isFavorite = favorites.some((item: any) => item.imdbID === movie.imdbID);
-  // console.log(isFavorite);
+  const navigate = useNavigate();
   const handleClick = async () => {
+    if(localStorage.getItem('user__token') === null) {
+      navigate('/login');
+      return;
+    } 
     setLoading(true);
     await handleFavorite(movie.imdbID, isFavorite ? 'remove' : 'add')
       .then(() => fetchFavorites())

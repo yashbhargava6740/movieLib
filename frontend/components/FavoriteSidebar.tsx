@@ -7,9 +7,6 @@ export const FavoriteSidebar = () => {
   React.useEffect(() => {
     fetchFavorites();
   }, []);
-
- 
-
   return (
     <>
       <div className='drawer drawer-end'>
