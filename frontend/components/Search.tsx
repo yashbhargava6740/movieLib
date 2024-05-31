@@ -1,9 +1,6 @@
 import React from 'react';
-
 import useDebounce from '../hooks/Debounce.js';
-
 import { useMovieStore } from '../src/zstand/store.js';
-
 import { baseUrl } from '../config/api.js';
 
 export const Search = () => {
