@@ -14,9 +14,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    
+    likedMovies: {
+        type: Array,
+        default: []
+    }
+
 }, { timestamps: true });
 
-const UserModel = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-module.exports = UserModel;
+module.exports = User;

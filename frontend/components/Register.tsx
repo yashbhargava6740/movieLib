@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
+import '../src/App.css';
 import toast from "react-hot-toast";
 const Register = () => {
+  useEffect(() => {
+    const userToken = localStorage.getItem("user__token");
+    if (userToken) {
+      navigate("/home");
+    }
+  }, []);
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +19,6 @@ const Register = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     axios
       .post(`${import.meta.env.VITE_SERVER}user/register`, {
         name,

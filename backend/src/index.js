@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('../routes/authRoutes');
+const searchRoute = require('../routes/search.route');
+const favoriteRoute = require('../routes/favorite.route');
 const { connectDB } = require('../config/dbConnect');
 const app = express();
 require("dotenv").config();
@@ -16,6 +18,8 @@ const init = async() => {
         res.send("Welcome");
     });
     app.use("/user", authRoutes);
+    app.use('/api/movies/search', searchRoute);
+    app.use('/api/movies/favorites', favoriteRoute);
 }
 
 module.exports = { init };

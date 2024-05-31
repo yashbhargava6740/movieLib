@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import './App.css';
+import '../src/App.css';
 import toast from "react-hot-toast";
 
-const Login = () => {
+const Login = ({ setUserToken }: any) => {
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const userToken = localStorage.getItem("user__token");
+    if (userToken) {
+      navigate("/home");
+    }
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     axios
       .post(`${import.meta.env.VITE_SERVER}user/login`, { email, password })
       .then((result) => {
@@ -19,13 +26,14 @@ const Login = () => {
         if (result.data.token) {
           // console.log("Login Success");
           localStorage.setItem("user__token", result.data.token);
+          setUserToken(result.data.token); // Set the token in the App component (state management
           toast.success("login success");
           navigate("/home");
         } else if (result.data.message === "User not found") {
           toast.error("User not found. Please register first.");
           navigate("/register"); // Redirect to the registration page
         } else {
-          toast.error("Incorrect password! Please try again.");
+          // toast.error("Incorrect password! Please try again.");
         }
       })
       .catch((err) => console.log(err));
