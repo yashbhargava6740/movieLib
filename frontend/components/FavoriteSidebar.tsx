@@ -41,7 +41,7 @@ export const FavoriteSidebar: React.FC = () => {
             htmlFor="my-drawer-4"
             className="capitalize drawer-button btn bg-gray-700 text-white"
           >
-            See Favs 💗
+            See Playlists 💗
           </label>
           <span className="indicator-item badge bg-teal-700 text-white font-bold">
             {playlists.length} {/* Display number of playlists */}

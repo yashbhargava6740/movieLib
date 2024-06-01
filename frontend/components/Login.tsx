@@ -79,6 +79,9 @@ const Login = ({ setUserToken }: any) => {
         <p className="mt-4 text-center">
           Don't have an account? <Link to="/register">Register</Link>
         </p>
+        <p className="mt-4 text-center">
+          Continue without login? <Link to="/home">Let's Go!</Link>
+        </p>
       </div>
     </div>
   );
