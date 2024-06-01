@@ -1,4 +1,5 @@
 import React, { useState, Suspense } from 'react';
+// @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 import PlaylistDialog from './PlaylistDialog.tsx';
 

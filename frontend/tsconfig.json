@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/redux"],
+  "include": ["src", "/frontend"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
+// @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
-import { handleFavorite } from '../actions/action.js';
-import { useNavigate } from 'react-router-dom';
 
 interface MovieProps {
   movie: {
@@ -15,34 +14,6 @@ interface MovieProps {
 }
 
 const MovieCard: React.FC<MovieProps> = ({ movie, onShowDialog }) => {
-  const { fetchFavorites, favorites } = useMovieStore();
-  const [loading, setLoading] = useState(false);
-  const isFavorite = favorites.some((item: any) => item.imdbID === movie.imdbID);
-  const navigate = useNavigate();
-
-  // To be removed
-  const handleClick = async () => {
-    if (localStorage.getItem('user__token') === null) {
-      navigate('/login');
-      return;
-    }
-    setLoading(true);
-    try {
-      await handleFavorite(movie.imdbID, isFavorite ? 'remove' : 'add');
-      fetchFavorites();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // To be removed
-  const getButtonLabel = () => {
-    if (isFavorite) {
-      return loading ? 'Removing...' : 'Remove Fav';
-    } else {
-      return loading ? 'Adding...' : 'Add to Fav';
-    }
-  };
 
   return (
     <div key={movie.key} className="group relative flex flex-col gap-2">
