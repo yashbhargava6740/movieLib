@@ -1,8 +1,9 @@
 const axios = require('axios');
-
+const Playlist = require('../models/Playlist');
 const omdbApiKey = process.env.OMDB_API_KEY;
 
 const getSearchedMovie = async (req, res, next) => {
+	// console.log("searching for movies");
 	const { query } = req.query;
 	try {
 		const omdbResponse = await axios.get(
@@ -15,7 +16,35 @@ const getSearchedMovie = async (req, res, next) => {
 		res.status(500).json({ error: 'An error occurred while searching for movies.' });
 	}
 };
+const getMovieById = async (req, res, next) => {
+	// console.log("searching for movie by id");
+	const { id: imdbID } = req.params;
+	try {
+		const omdbResponse = await axios.get(
+			`http://www.omdbapi.com/?i=${imdbID}&apikey=${omdbApiKey}`
+		);
+		const { Title, Year, Type, Poster } = omdbResponse.data;
+
+		res.status(200).json({ Title, Year, imdbID, Type, Poster });
+	} catch (error) {
+		console.error('Error fetching movie details:', error);
+		res.status(500).json({ error: 'An error occurred while fetching movie details.' });
+	}
+};
+const fetchAllPublicPlaylists = async (req, res, next) => {
+	// console.log("fetching all public playlists");
+	try {
+		const playlists = await Playlist.find({ visibility: true }).select('username playlistName movies');
+		console.log(playlists);
+		res.status(200).json({ playlists });
+	} catch (error) {
+		console.error('Error fetching public playlists:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+};
 
 module.exports = {
 	getSearchedMovie,
+	getMovieById,
+	fetchAllPublicPlaylists,
 };

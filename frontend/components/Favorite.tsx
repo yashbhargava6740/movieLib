@@ -3,7 +3,6 @@ import FavCard from './FavCard';
 // @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 
-// eslint-enable
 type Props = {};
 
 export function Favorite({}: Props) {
@@ -21,6 +20,7 @@ export function Favorite({}: Props) {
 					<span className='text-teal-700 text-3xl font-semibold'>No Favs</span>
 				) : (
 					favorites?.map((movie: any, index: any) => {
+						// @ts-ignore
 						return <FavCard key={index} movie={movie} />;
 					})
 				)}

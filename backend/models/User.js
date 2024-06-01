@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     },
     likedMovies: {
         type: Array,
+        default:[],
+    },
+    playLists: {
+        type: Array,
         default: []
     }
 
