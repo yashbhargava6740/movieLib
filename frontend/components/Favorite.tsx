@@ -3,6 +3,7 @@ import FavCard from './FavCard';
 // @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 
+// eslint-enable
 type Props = {};
 
 export function Favorite({}: Props) {

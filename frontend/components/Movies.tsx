@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 // @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
-
+// eslint-enable
 const MovieCard = React.lazy(() => import('./MovieCard'));
 
 type Props = {};

@@ -3,7 +3,7 @@ import React from 'react';
 import { useMovieStore } from '../src/zstand/store.js';
 import { handleFavorite } from '../actions/action.js';
 import { useNavigate } from 'react-router-dom';
-
+// eslint-enable
 const MovieCard = ({ movie }: any) => {
   const { fetchFavorites, favorites } = useMovieStore();
   const [loading, setLoading] = React.useState(false);

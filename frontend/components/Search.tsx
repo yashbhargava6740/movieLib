@@ -4,7 +4,7 @@ import useDebounce from '../hooks/Debounce.js';
 import { useMovieStore } from '../src/zstand/store.js';
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
-
+// eslint-enable
 export const Search = () => {
 	const movieStore = useMovieStore();
 

@@ -2,6 +2,7 @@ import React from 'react';
 // @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 import { handleFavorite } from '../actions/action.js';
+// eslint-enable
 const FavCard = ({ movie }: any) => {
 	const { fetchFavorites } = useMovieStore();
 	const [loading, setLoading] = React.useState(false);

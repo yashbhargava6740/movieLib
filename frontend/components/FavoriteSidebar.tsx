@@ -2,7 +2,7 @@ import React from 'react';
 // @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 import FavCard from './FavCard';
-
+// eslint-enable
 export const FavoriteSidebar = () => {
   const { favorites, fetchFavorites } = useMovieStore();
   React.useEffect(() => {
