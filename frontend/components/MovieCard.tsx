@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 import { handleFavorite } from '../actions/action.js';
 import { useNavigate } from 'react-router-dom';

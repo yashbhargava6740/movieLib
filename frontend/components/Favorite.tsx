@@ -1,6 +1,6 @@
 import React from 'react';
 import FavCard from './FavCard';
-
+// @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 
 type Props = {};

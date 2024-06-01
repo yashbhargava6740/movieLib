@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+// @ts-ignore
 import { useMovieStore } from '../src/zstand/store.js';
 
 const MovieCard = React.lazy(() => import('./MovieCard'));

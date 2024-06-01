@@ -1,3 +1,4 @@
+// @ts-ignore
 import { baseUrl } from '../config/api.js';
 
 export const handleFavorite = async (imdbID: string, actionType: string) => {
