@@ -7,11 +7,13 @@ import { useState, useEffect } from 'react';
 function Home() {
 	const navigate = useNavigate();
 	const [text, setText] = useState('');
-
+	const goToPublicPlaylists = () => {
+		navigate('/seepublic'); 
+	};
     useEffect(() => {
         const userToken = localStorage.getItem('user__token');
         setText(userToken ? 'Logout' : 'Login');
-    }, []); // Only run once on component mount to set the initial text
+    }, []); 
 
 	const logout = () => {
 		localStorage.removeItem('user__token');
@@ -27,6 +29,11 @@ function Home() {
 					<button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={logout}>{text}</button>
 					<div>
 						<FavoriteSidebar />
+						<button
+							className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4'
+							onClick={goToPublicPlaylists}>
+							See Public Playlists
+						</button>
 					</div>
 				</div>
 				<div className='w-5/6'>
