@@ -4,7 +4,7 @@ import FavCard from './FavCard';
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
 import toast from 'react-hot-toast';
-import Loader from './Loader.tsx';
+import { Oval } from 'react-loader-spinner';
 
 const FavoriteSidebar: React.FC = () => {
   const [playlists, setPlaylists] = useState<any[]>([]); // State to store user's playlists
@@ -69,7 +69,18 @@ const FavoriteSidebar: React.FC = () => {
             Playlists 💗
           </span>
           {loading ? (
-            <Loader /> // Show loader while fetching playlists
+            <div className="flex justify-center items-center w-full">
+              <Oval
+                height={40}
+                width={40}
+                color="#4fa94d"
+                visible={true}
+                ariaLabel="oval-loading"
+                secondaryColor="#4fa94d"
+                strokeWidth={2}
+                strokeWidthSecondary={2}
+              />
+            </div>
           ) : error ? (
             <span className="text-red-500">{error}</span> // Display error message
           ) : playlists.length > 0 ? (

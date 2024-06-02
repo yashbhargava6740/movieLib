@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loader from './Loader';
+import { Oval } from 'react-loader-spinner';
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
 
@@ -49,7 +49,20 @@ const Login = ({ setUserToken }: any) => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      {loading && <Loader />}
+      {loading && (
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50">
+          <Oval
+            height={80}
+            width={80}
+            color="#4fa94d"
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="#4fa94d"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        </div>
+      )}
       <div className="w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6">Login</h2>
         <form onSubmit={handleSubmit}>
@@ -89,10 +102,10 @@ const Login = ({ setUserToken }: any) => {
           </button>
         </form>
         <p className="mt-4 text-center">
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register" className="text-blue-500">Register</Link>
         </p>
         <p className="mt-4 text-center">
-          Continue without login? <Link to="/home">Let's Go!</Link>
+          Continue without login? <Link to="/home" className="text-blue-500">Let's Go!</Link>
         </p>
       </div>
     </div>

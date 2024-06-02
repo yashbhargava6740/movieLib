@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loader from './Loader';
+import { Oval } from 'react-loader-spinner';
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
 
@@ -45,9 +45,22 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      {loading && <Loader />}
-      <div className="w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6">Register</h2>
+      {loading && (
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50">
+          <Oval
+            height={80}
+            width={80}
+            color="#4fa94d"
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="#4fa94d"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        </div>
+      )}
+      <div className="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="exampleInputName" className="block mb-2">
@@ -99,7 +112,7 @@ const Register = () => {
           </button>
         </form>
         <p className="mt-4 text-center">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
         </p>
       </div>
     </div>
