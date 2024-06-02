@@ -17,6 +17,9 @@ const init = async() => {
     app.get("/", (req,res) => {
         res.send("Welcome");
     });
+    app.use("/", (req,res) => {
+        res.status(200).send("Welcome to the movie app");
+    });
     app.use("/user", authRoutes);
     app.use('/api/movies/search', searchRoute);
     app.use('/api/movies/favorites', favoriteRoute);
