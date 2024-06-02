@@ -95,11 +95,13 @@ const createPlaylist = async (req, res, next) => {
 };
 
 const modifyPlaylist = async (req, res, next) => {
+	// console.log("Called modify route");
 	try {
 		const { playlistId, imdbID } = req.body;
 		const { _id } = req.user;
 
-		if (!playlistId || !imdbID) {
+		if (!playlistId || !imdbID) {	
+			
 			return res.status(400).json({ error: 'Invalid request data.' });
 		}
 		const user = await User.findById(_id);
@@ -108,6 +110,7 @@ const modifyPlaylist = async (req, res, next) => {
 			const playlist = user.playLists.find((p) => p.id === playlistId);
 			if (playlist) {
 				if (user.likedMovies.includes(imdbID) || playlist.imdbIDs.includes(imdbID)) {
+					console.log("returning");
 					return res.status(400).json({ error: 'Movie already exists in user or playlist.' });
 				}
 				playlist.imdbIDs.push(imdbID);

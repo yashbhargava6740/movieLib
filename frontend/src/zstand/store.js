@@ -4,7 +4,29 @@ import { baseUrl } from '../../config/api.js';
 export const useMovieStore = create((set) => ({
   searchResults: [],
   favorites: [],
-  setSearchResults: (results) => set({ searchResults: results }),
+  setSearchResults: async (results) => {
+    if (results.length === 0) {
+      // Fetch playlists if search results are empty
+      // console.log("Yes");
+      try {
+        const response = await fetch(`${baseUrl}/api/movies/search/playlists`, {
+          method: 'GET',
+        });
+        if (response.ok) {
+          const { playlists } = await response.json();
+          console.log(playlists);
+          set({ searchResults: playlists[0].movies }); // Set search results to fetched playlists
+        } else {
+          console.error('Error fetching playlists:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching playlists:', error);
+      }
+    } else {
+      // Set search results if not empty
+      set({ searchResults: results });
+    }
+  },
   fetchFavorites: async () => {
     try {
       const response = await fetch(`${baseUrl}/api/movies/favorites/all`, {

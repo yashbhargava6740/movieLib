@@ -32,11 +32,22 @@ const getMovieById = async (req, res, next) => {
 	}
 };
 const fetchAllPublicPlaylists = async (req, res, next) => {
-	// console.log("fetching all public playlists");
 	try {
 		const playlists = await Playlist.find({ visibility: true }).select('username playlistName movies');
-		console.log(playlists);
-		res.status(200).json({ playlists });
+		const playlistsWithDetails = await Promise.all(playlists.map(async (playlist) => {
+			const moviesWithDetails = await Promise.all(playlist.movies.map(async (imdbID) => {
+				try {
+					const response = await axios.get(`http://www.omdbapi.com/?i=${imdbID}&apikey=${omdbApiKey}`);
+					const { Title, Type, Year, Poster } = response.data;
+					return { Title, Type, Year, imdbID, Poster };
+				} catch (error) {
+					console.error('Error fetching movie details:', error);
+					return null;
+				}
+			}));
+			return { ...playlist.toObject(), movies: moviesWithDetails.filter(movie => movie !== null) };
+		}));
+		res.status(200).json({ ok: true, playlists: playlistsWithDetails });
 	} catch (error) {
 		console.error('Error fetching public playlists:', error);
 		res.status(500).json({ error: 'Internal server error' });

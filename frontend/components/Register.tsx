@@ -26,7 +26,6 @@ const Register = () => {
         password,
       })
       .then((result) => {
-        console.log(result);
         if (result.data === "Already registered") {
           toast.error("E-mail already registered! Please Login to proceed.");
           navigate("/login");

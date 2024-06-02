@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
+// @ts-ignore
+import { baseUrl } from '../config/api.js';
 interface Playlist {
   id: string;
   playlistName: string;
@@ -23,7 +25,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
     const fetchPlaylists = async () => {
       try {
         const token = localStorage.getItem('user__token');
-        const response = await axios.get('http://localhost:8000/api/movies/favorites/playlists', {
+        const response = await axios.get(`${baseUrl}/api/movies/favorites/playlists`, {
           headers: {
             authorization: `Bearer ${token}`
           }
@@ -43,14 +45,14 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
     try {
       const token = localStorage.getItem('user__token');
       await axios.post(
-        'http://localhost:8000/api/movies/favorites/modifyPlaylist',
+        `${baseUrl}/api/movies/favorites/modifyPlaylist`,
         {
           playlistId,
           imdbID: movieId
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            authorization: `Bearer ${token}`
           }
         }
       );
@@ -66,7 +68,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
     try {
       const token = localStorage.getItem('user__token');
       await axios.post(
-        'http://localhost:8000/api/movies/favorites/createPlayList',
+        `${baseUrl}/api/movies/favorites/createPlayList`,
         {
           id: newPlaylistId,
           playlistName: newPlaylistName,
@@ -74,7 +76,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            authorization: `Bearer ${token}`
           }
         }
       );
