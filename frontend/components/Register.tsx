@@ -2,10 +2,16 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Loader from './Loader';
 // @ts-ignore
-import {baseUrl} from '../config/api.js';
+import { baseUrl } from '../config/api.js';
+
 const Register = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const userToken = localStorage.getItem("user__token");
@@ -14,32 +20,32 @@ const Register = () => {
     }
   }, [navigate]);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios
-      .post(`${baseUrl}/user/register`, {
-        name,
-        email,
-        password,
-      })
-      .then((result) => {
-        if (result.data === "Already registered") {
-          toast.error("E-mail already registered! Please Login to proceed.");
-          navigate("/login");
-        } else {
-          toast.success("Registered successfully! Please Login to proceed.");
-          navigate("/login");
-        }
-      })
-      .catch((err) => console.log(err));
+    setLoading(true);
+
+    try {
+      const result = await axios.post(`${baseUrl}/user/register`, { name, email, password });
+      setLoading(false);
+
+      if (result.data.message === 'User already exists') {
+        toast.error(result.data.message || "E-mail already registered! Please Login to proceed.");
+        navigate("/login");
+      } else {
+        toast.success(result.data.message || "Registered successfully! Please Login to proceed.");
+        navigate("/login");
+      }
+    } catch (err) {
+      setLoading(false);
+      // @ts-ignore
+      toast.error(err.response?.data?.message || "An error occurred. Please try again later.");
+      console.error(err);
+    }
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
+      {loading && <Loader />}
       <div className="w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6">Register</h2>
         <form onSubmit={handleSubmit}>
