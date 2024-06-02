@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
+import { Oval } from 'react-loader-spinner'; // Import the loader component
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
+
 interface Playlist {
   id: string;
   playlistName: string;
@@ -25,6 +27,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
     const fetchPlaylists = async () => {
       try {
         const token = localStorage.getItem('user__token');
+        setLoading(true);
         const response = await axios.get(`${baseUrl}/api/movies/favorites/playlists`, {
           headers: {
             authorization: `Bearer ${token}`
@@ -41,61 +44,67 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
     fetchPlaylists();
   }, []);
 
-const handleAddToPlaylist = async (playlistId: string) => {
-  try {
-    const token = localStorage.getItem('user__token');
-    await axios.post(
-      `${baseUrl}/api/movies/favorites/modifyPlaylist`,
-      {
-        playlistId,
-        imdbID: movieId
-      },
-      {
-        headers: {
-          authorization: `Bearer ${token}`
+  const handleAddToPlaylist = async (playlistId: string) => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('user__token');
+      await axios.post(
+        `${baseUrl}/api/movies/favorites/modifyPlaylist`,
+        {
+          playlistId,
+          imdbID: movieId
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         }
+      );
+      toast.success('Movie added to playlist successfully!');
+      onClose();
+    } catch (err) {
+      // @ts-ignore
+      if (err.response && err.response.status === 400 && err.response.data.error === 'Movie already exists in user or playlist.') {
+        toast.error('Movie already exists in the playlist.');
+      } else {
+        setError('Failed to add movie to playlist');
       }
-    );
-    toast.success('Movie added to playlist successfully!');
-    onClose();
-  } catch (err) {
-    // @ts-ignore
-    if (err.response && err.response.status === 400 && err.response.data.error === 'Movie already exists in user or playlist.') {
-      toast.error('Movie already exists in the playlist.');
-    } else {
-      setError('Failed to add movie to playlist');
+    } finally {
+      setLoading(false);
     }
-  }
-};
+  };
 
-const handleCreatePlaylist = async () => {
-  const newPlaylistId = uuidv4();
-  try {
-    const token = localStorage.getItem('user__token');
-    await axios.post(
-      `${baseUrl}/api/movies/favorites/createPlaylist`,
-      {
-        id: newPlaylistId,
-        playlistName: newPlaylistName,
-        imdbID: movieId
-      },
-      {
-        headers: {
-          authorization: `Bearer ${token}`
+  const handleCreatePlaylist = async () => {
+    const newPlaylistId = uuidv4();
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('user__token');
+      await axios.post(
+        `${baseUrl}/api/movies/favorites/createPlaylist`,
+        {
+          id: newPlaylistId,
+          playlistName: newPlaylistName,
+          imdbID: movieId
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         }
+      );
+      toast.success('Playlist created and movie added successfully!');
+      onClose();
+    } catch (err) {
+      // @ts-ignore
+      if (err.response && err.response.status === 400 && err.response.data.error === 'Movie already exists in user or playlist.') {
+        toast.error('Movie already exists in one of your playlists.');
+      } else {
+        setError('Failed to create playlist');
       }
-    );
-    toast.success('Playlist created and movie added successfully!');
-    onClose();
-  } catch (err) {
-    // @ts-ignore
-    if (err.response && err.response.status === 400 && err.response.data.error === 'Movie already exists in user or playlist.') {
-      toast.error('Movie already exists in one of your playlists.');
-    } else {
-      setError('Failed to create playlist');
+    } finally {
+      setLoading(false);
     }
-  }
-};
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -104,7 +113,18 @@ const handleCreatePlaylist = async () => {
           ×
         </button>
         {loading ? (
-          <p className="text-center">Loading playlists...</p>
+          <div className="flex justify-center items-center h-32">
+            <Oval
+              height={40}
+              width={40}
+              color="#4fa94d"
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#4fa94d"
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            />
+          </div>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : (
