@@ -1,32 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import Axios for making HTTP requests
+import axios from 'axios';
 import FavCard from './FavCard';
 // @ts-ignore
-import {baseUrl} from '../config/api.js'
-export const FavoriteSidebar: React.FC = () => {
+import { baseUrl } from '../config/api.js';
+import toast from 'react-hot-toast';
+import Loader from './Loader.tsx';
+
+const FavoriteSidebar: React.FC = () => {
   const [playlists, setPlaylists] = useState<any[]>([]); // State to store user's playlists
+  const [loading, setLoading] = useState(false); // State to manage loading state
+  const [error, setError] = useState<string | null>(null); // State to manage error state
 
   useEffect(() => {
     const fetchPlaylists = async () => {
+      setLoading(true); // Set loading state to true
       try {
-        const token = localStorage.getItem('user__token'); // Get token from localStorage
-        if (!token) return; 
+        const token = localStorage.getItem('user__token');
+        if (!token) return;
+
         const response = await axios.get(`${baseUrl}/api/movies/favorites/playlists`, {
           headers: {
-            authorization: `Bearer ${token}`, 
+            authorization: `Bearer ${token}`,
           },
         });
-        setPlaylists(response.data.playlists); 
+        setPlaylists(response.data.playlists);
       } catch (error) {
         console.error('Error fetching playlists:', error);
+        setError('An error occurred while fetching playlists.'); // Set error message
+        toast.error('An error occurred while fetching playlists.'); // Display error toast
+      } finally {
+        setLoading(false); // Set loading state to false
       }
     };
-    fetchPlaylists(); 
+
+    fetchPlaylists();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(playlists);
-  // }, [playlists]);
   const handlePlaylistClick = (playlistId: string) => {
     console.log('Playlist clicked:', playlistId);
     // Add logic to handle playlist click
@@ -44,7 +53,7 @@ export const FavoriteSidebar: React.FC = () => {
             See Playlists 💗
           </label>
           <span className="indicator-item badge bg-teal-700 text-white font-bold">
-            {playlists.length} {/* Display number of playlists */}
+            {playlists.length}
           </span>
         </div>
       </div>
@@ -59,7 +68,11 @@ export const FavoriteSidebar: React.FC = () => {
             <span className="text-teal-500">{playlists.length} </span>
             Playlists 💗
           </span>
-          {playlists.length > 0 ? (
+          {loading ? (
+            <Loader /> // Show loader while fetching playlists
+          ) : error ? (
+            <span className="text-red-500">{error}</span> // Display error message
+          ) : playlists.length > 0 ? (
             playlists.map((playlist: any, index: number) => (
               <li key={index}>
                 {/* Pass playlist and click handler to FavCard component */}
@@ -74,3 +87,5 @@ export const FavoriteSidebar: React.FC = () => {
     </div>
   );
 };
+
+export default FavoriteSidebar;

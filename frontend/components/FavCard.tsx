@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
+import toast from 'react-hot-toast';
+import Loader from './Loader.tsx';
 
 interface Playlist {
   id: string;
@@ -11,7 +13,6 @@ interface Playlist {
 }
 
 interface FavCardProps {
-  movie?: Movie;
   playlist: Playlist;
   onPlaylistClick: (playlistId: string) => void;
 }
@@ -42,7 +43,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
 
   const handleVisibilityChange = async (newVisibility: boolean) => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `${baseUrl}/api/movies/favorites/updateVisibility/${playlist.id}`,
         { visibility: newVisibility },
         {
@@ -52,8 +53,10 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
         }
       );
       setVisibility(newVisibility);
+      toast.success(response.data.message); // Display success toast
     } catch (error) {
       console.error('Error updating visibility:', error);
+      toast.error('An error occurred while updating visibility.'); // Display error toast
     }
   };
 
@@ -72,6 +75,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
       } catch (error) {
         setError('Error fetching movie details');
         console.error('Error fetching movie details:', error);
+        toast.error('An error occurred while fetching movie details.'); // Display error toast
       } finally {
         setLoading(false);
       }
@@ -115,7 +119,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
       {showMovies && (
         <div className="mt-4">
           {loading ? (
-            <span className="text-gray-400">Loading...</span>
+            <Loader /> // Show loader while loading
           ) : error ? (
             <span className="text-red-500">{error}</span>
           ) : (

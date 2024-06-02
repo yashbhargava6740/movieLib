@@ -1,7 +1,7 @@
 // import '../src/App.css';
 import { Search } from '../components/Search';
 import { Movies } from '../components/Movies';
-import { FavoriteSidebar } from '../components/FavoriteSidebar';
+import  FavoriteSidebar from './FavoriteSidebar.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 function Home() {
