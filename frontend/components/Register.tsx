@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Oval } from 'react-loader-spinner';
+import { Oval } from "react-loader-spinner";
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
 
@@ -59,8 +59,8 @@ const Register = () => {
           />
         </div>
       )}
-      <div className="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
+      <div className="w-full max-w-md">
+        <h2 className="text-3xl font-bold mb-6">Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="exampleInputName" className="block mb-2">
@@ -112,7 +112,7 @@ const Register = () => {
           </button>
         </form>
         <p className="mt-4 text-center">
-          Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
