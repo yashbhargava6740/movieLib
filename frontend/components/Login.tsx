@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+// @ts-ignore
+import {baseUrl} from '../config/api.js';
 const Login = ({ setUserToken }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +20,7 @@ const Login = ({ setUserToken }: any) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
-      .post(`${import.meta.env.VITE_SERVER}user/login`, { email, password })
+      .post(`${baseUrl}/user/login`, { email, password })
       .then((result) => {
         if (result.data.token) {
           localStorage.setItem("user__token", result.data.token);

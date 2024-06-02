@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+// @ts-ignore
+import {baseUrl} from '../config/api.js';
 const Register = () => {
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const Register = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
-      .post(`${import.meta.env.VITE_SERVER}user/register`, {
+      .post(`${baseUrl}/user/register`, {
         name,
         email,
         password,
