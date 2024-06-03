@@ -63,32 +63,32 @@ This project is a Movie Library Web Application that allows users to sign in, se
 
 3. Create a .env file in the root of the backend directory and add the following variables:
    env
-   PORT=8000
-   MONGODB_URI=<your-mongodb-uri>
-   JWT_SECRET=<your-jwt-secret>
-   OMDB_API_KEY=<your-omdb-api-key>
+   - PORT=8000
+   - MONGODB_URI=<your-mongodb-uri>
+   - JWT_SECRET=<your-jwt-secret>
+   - OMDB_API_KEY=<your-omdb-api-key>
    
 
 4. Start the backend server:
    sh
-   npm start
+   - npm start
    
 
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
    sh
-   cd frontend
+   - cd frontend
    
 
 2. Install dependencies:
    sh
-   npm install
+   - npm install
 
    
 3. Start the frontend development server:
    sh
-   npm run dev
+   - npm run dev
    
 
 ### Hosting
