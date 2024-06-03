@@ -7,7 +7,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 // @ts-ignore
 import { baseUrl } from '../config/api.js';
 
-const Login = ({ setUserToken}: any) => {
+const Login = ({ setUserToken }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const Login = ({ setUserToken}: any) => {
         });
       };
     }
-    
+
     const noticeTimer = setTimeout(() => {
       toast("Server requests might take a minute. Please wait...", {
         duration: 4000,
@@ -47,14 +47,30 @@ const Login = ({ setUserToken}: any) => {
         },
       });
     }, 0);
-    
+
     return () => clearTimeout(noticeTimer);
   }, [navigate]);
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error("Password should be at least 8 characters long.");
+      return;
+    }
+
     setLoading(true);
-    
+
     try {
       const result = await axios.post(`${baseUrl}/user/login`, { email, password });
       setLoading(false);
