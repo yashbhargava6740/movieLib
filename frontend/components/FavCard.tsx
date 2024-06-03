@@ -102,7 +102,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
   }, [showMovies, playlist.imdbIDs]);
 
   return (
-    <div className="group mt-3 mb-0 relative flex flex-col gap-4 p-4 border border-gray-700 shadow-lg rounded-lg bg-gradient-to-br from-gray-800 to-black text-white transform transition-transform hover:scale-105 hover:shadow-2xl mb-6">
+    <div className="group mt-3 relative flex flex-col gap-4 p-4 border border-gray-700 shadow-lg rounded-lg bg-gradient-to-br from-gray-800 to-black text-white transform transition-transform hover:scale-105 hover:shadow-2xl mb-6">
       <div className="flex items-center gap-5 justify-between">
         <span className="text-2xl font-semibold cursor-pointer hover:text-blue-400 transition-colors" onClick={handlePlaylistClick}>
           {playlist.playlistName}

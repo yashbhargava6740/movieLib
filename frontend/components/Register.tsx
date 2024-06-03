@@ -14,6 +14,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState("light");
+
   useEffect(() => {
     const userToken = localStorage.getItem("user__token");
     if (userToken) {
@@ -50,8 +51,29 @@ const Register = () => {
     return () => clearTimeout(noticeTimer);
   }, [navigate]);
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
+    if (name.length < 4) {
+      toast.error("Name should be at least 4 characters long.");
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error("Password should be at least 8 characters long.");
+      return;
+    }
+
     setLoading(true);
 
     try {
