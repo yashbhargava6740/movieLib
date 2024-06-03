@@ -9,10 +9,16 @@ export const Search = () => {
 	const movieStore = useMovieStore();
 
 	const [searchTerm, setSearchTerm] = React.useState('');
+	const [loading, setLoading] = React.useState(false);
 	const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
 	const fetching = async () => {
-		if (!debouncedSearchTerm) return movieStore.setSearchResults([]);
+		if (!debouncedSearchTerm) {
+			movieStore.setSearchResults([]);
+			setLoading(false);
+			return;
+		}
+		setLoading(true);
 		try {
 			const resp = await fetch(
 				`${baseUrl}/api/movies/search?query=${debouncedSearchTerm}`
@@ -21,6 +27,8 @@ export const Search = () => {
 			movieStore.setSearchResults(results);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -57,11 +65,32 @@ export const Search = () => {
 					id='default-search'
 					value={searchTerm}
 					onChange={(e) => setSearchTerm(e.target.value)}
-					className='block w-full p-4 pl-10 text-sm outline-none focus:outline-none  border  rounded-lg bg-gray-700 border-gray-600 placeholder-gray-300 text-white font-bold'
-					placeholder='Start typing to search...'
+					className='block w-full p-4 pl-10 text-sm outline-none focus:outline-none border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-300 text-white font-bold'
+					placeholder='Start typing no need to press enter....'
 					required
 				/>
 			</div>
+			{loading && (
+				<div className='flex justify-center mt-12'>
+					<svg
+						className='w-16 h-16 text-blue-500 animate-spin'
+						xmlns='http://www.w3.org/2000/svg'
+						fill='none'
+						viewBox='0 0 24 24'>
+						<circle
+							className='opacity-25'
+							cx='12'
+							cy='12'
+							r='10'
+							stroke='currentColor'
+							strokeWidth='4'></circle>
+						<path
+							className='opacity-75'
+							fill='currentColor'
+							d='M4 12a8 8 0 018-8v8H4z'></path>
+					</svg>
+				</div>
+			)}
 		</form>
 	);
 };
