@@ -64,9 +64,9 @@ This project is a Movie Library Web Application that allows users to sign in, se
 3. Create a .env file in the root of the backend directory and add the following variables:
    env
    - PORT=8000
-   - MONGODB_URI=<<your-mongodb-uri>>
-   - JWT_SECRET=<<your-jwt-secret>>
-   - OMDB_API_KEY=<<your-omdb-api-key>>
+   - MONGODB_URI=your_mongodb_uri
+   - JWT_SECRET=your_jwt_secret
+   - OMDB_API_KEY=your_omdb_api_key
    
 
 4. Start the backend server:
