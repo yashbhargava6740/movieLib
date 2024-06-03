@@ -18,7 +18,7 @@ const protect = asyncHandler(async (req, res, next) => {
             else {
                 const user = await USER.findOne({_id}).select();
                 req.user = user;
-                await redis.set('user', JSON.stringify(user));
+                await redis.set(_id, JSON.stringify(user));
             }
             next();
         }
