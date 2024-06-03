@@ -181,7 +181,76 @@ const updatePlaylistVisibility = async (req, res, next) => {
 	}
 };
 
+const deletePlaylist = async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const { _id } = req.user;
 
+		if (!id) {
+			return res.status(400).json({ error: 'Invalid request data.' });
+		}
+		const user = await User.findById(_id);
+		const playlist = await Playlist.findOneAndDelete({ user: _id, id });
+
+		if (user && playlist) {
+			user.playLists = user.playLists.filter((p) => p.id !== id);
+			user.markModified('playLists');
+			await user.save();
+			user.likedMovies = user.likedMovies.filter((movieId) => !playlist.movies.includes(movieId));
+			await user.save();
+			res.status(200).json({ message: 'Playlist deleted successfully.' });
+		} else {
+			res.status(404).json({ error: 'Playlist not found.' });
+		}
+	} catch (error) {
+		console.error('Error deleting playlist:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+};
+
+const deleteMovieFromPlaylist = async (req, res, next) => {
+	try {
+		const { playlistId, movieId } = req.body;
+		const { _id } = req.user;
+
+		if (!playlistId || !movieId) {
+			return res.status(400).json({ error: 'Invalid request data.' });
+		}
+
+		const user = await User.findById(_id);
+		const playlist = await Playlist.findOne({ user: _id, id: playlistId });
+
+		if (user && playlist) {
+			const playlistIndex = user.playLists.findIndex((p) => p.id === playlistId);
+			if (playlistIndex !== -1) {
+				const movieIndex = user.playLists[playlistIndex].imdbIDs.indexOf(movieId);
+				if (movieIndex !== -1) {
+					user.playLists[playlistIndex].imdbIDs.splice(movieIndex, 1);
+					user.markModified('playLists');
+					await user.save();
+				}
+			}
+
+			const playlistMovieIndex = playlist.movies.indexOf(movieId);
+			if (playlistMovieIndex !== -1) {
+				playlist.movies.splice(playlistMovieIndex, 1);
+				await playlist.save();
+			}
+
+			if (!user.playLists.some((p) => p.imdbIDs.includes(movieId))) {
+				user.likedMovies = user.likedMovies.filter((id) => id !== movieId);
+				await user.save();
+			}
+
+			res.status(200).json({ message: 'Movie deleted from playlist successfully.' });
+		} else {
+			res.status(404).json({ error: 'Playlist not found.' });
+		}
+	} catch (error) {
+		console.error('Error deleting movie from playlist:', error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+};
 module.exports = {
 	getFavorite,
 	modifyFavorite,
@@ -189,4 +258,6 @@ module.exports = {
 	modifyPlaylist,
 	fetchAllPlaylists,
 	updatePlaylistVisibility,
+	deletePlaylist,
+	deleteMovieFromPlaylist
 };

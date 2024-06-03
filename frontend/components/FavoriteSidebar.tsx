@@ -40,7 +40,57 @@ const FavoriteSidebar: React.FC = () => {
     console.log('Playlist clicked:', playlistId);
     // Add logic to handle playlist click
   };
+  const handleDeletePlaylist = async (playlistId: string) => {
+    try {
+      const token = localStorage.getItem('user__token');
+      if (!token) return;
 
+      await axios.delete(`${baseUrl}/api/movies/favorites/deletePlaylist/${playlistId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      setPlaylists((prevPlaylists) =>
+        prevPlaylists.filter((playlist) => playlist.id !== playlistId)
+      );
+
+      toast.success('Playlist deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting playlist:', error);
+      toast.error('An error occurred while deleting the playlist.');
+    }
+  };
+
+  const handleDeleteMovie = async (playlistId: string, movieId: string) => {
+    try {
+      const token = localStorage.getItem('user__token');
+      if (!token) return;
+  
+      await axios.delete(
+        `${baseUrl}/api/movies/favorites/deleteMovie`,
+        {
+          data: { playlistId, movieId },
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setPlaylists((prevPlaylists) =>
+        prevPlaylists.map((playlist) =>
+          playlist.id === playlistId
+            ? { ...playlist, imdbIDs: playlist.imdbIDs.filter((id: string) => id !== movieId) }
+            : playlist
+        )
+      );
+  
+      toast.success('Movie deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting movie:', error);
+      toast.error('An error occurred while deleting the movie.');
+    }
+  };
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -85,9 +135,15 @@ const FavoriteSidebar: React.FC = () => {
             <span className="text-red-500">{error}</span> // Display error message
           ) : playlists.length > 0 ? (
             playlists.map((playlist: any, index: number) => (
-              <li key={index}>
+              <li key={index} className="transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex items-center justify-between">
                 {/* Pass playlist and click handler to FavCard component */}
-                <FavCard playlist={playlist} onPlaylistClick={handlePlaylistClick} />
+                <FavCard playlist={playlist} onPlaylistClick={handlePlaylistClick} onDeleteMovie={handleDeleteMovie} />
+                <button
+                  onClick={() => handleDeletePlaylist(playlist.id)}
+                  className="ml-4 text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
               </li>
             ))
           ) : (

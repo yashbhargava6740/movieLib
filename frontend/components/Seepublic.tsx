@@ -87,7 +87,7 @@ const Seepublic: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {publicPlaylists.map((playlist, index) => (
+            {publicPlaylists.map((playlist, index) => playlist.movies.length > 0 ? (
               <div
                 key={`${playlist.id}-${index}`}
                 className={`border border-gray-700 rounded-lg p-4 shadow-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md ${
@@ -139,7 +139,7 @@ const Seepublic: React.FC = () => {
                   </div>
                 )}
               </div>
-            ))}
+            ) : null)}
           </div>
         )}
         <button

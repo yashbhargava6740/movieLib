@@ -61,6 +61,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
         }
       );
       toast.success('Movie added to playlist successfully!');
+      window.location.reload();
       onClose();
     } catch (err) {
       // @ts-ignore
@@ -93,6 +94,7 @@ const PlaylistDialog: React.FC<PlaylistDialogProps> = ({ movieId, onClose }) => 
         }
       );
       toast.success('Playlist created and movie added successfully!');
+      window.location.reload();
       onClose();
     } catch (err) {
       // @ts-ignore

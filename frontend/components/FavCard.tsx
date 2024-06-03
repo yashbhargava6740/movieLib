@@ -15,6 +15,7 @@ interface Playlist {
 interface FavCardProps {
   playlist: Playlist;
   onPlaylistClick: (playlistId: string) => void;
+  onDeleteMovie: (playlistId: string, movieId: string) => void;
 }
 
 interface Movie {
@@ -25,7 +26,7 @@ interface Movie {
   Poster: string;
 }
 
-const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
+const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMovie }) => {
   const [showMovies, setShowMovies] = useState(false);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
@@ -141,6 +142,12 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick }) => {
                   <span className="text-lg font-semibold">{movie.Title}</span>
                   <span className="text-sm text-gray-400">{movie.Year}</span>
                 </div>
+                <button
+                  onClick={() => onDeleteMovie(playlist.id, movie.imdbID)}
+                  className="ml-auto text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
               </div>
             ))
           )}
