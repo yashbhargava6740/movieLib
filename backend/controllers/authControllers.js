@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require('../models/User');
 const jwt = require("jsonwebtoken");
+const redis = require('../client/Redis.js');
 require("dotenv").config();
 
 const register = async (req, res) => {
@@ -49,7 +50,8 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: 'Invalid Credentials' });
     }
-
+    await redis.set(validUser._id, JSON.stringify(validUser));
+    await redis.expire(validUser._id,3600);
     const { _id, ...userInfo } = validUser._doc;
     userInfo.password = undefined;
     
