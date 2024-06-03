@@ -10,6 +10,7 @@ const FavoriteSidebar: React.FC = () => {
   const [playlists, setPlaylists] = useState<any[]>([]); // State to store user's playlists
   const [loading, setLoading] = useState(false); // State to manage loading state
   const [error, setError] = useState<string | null>(null); // State to manage error state
+  const [deleteLoading, setDeleteLoading] = useState<string | null>(null); // State to manage delete loading state
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -40,8 +41,10 @@ const FavoriteSidebar: React.FC = () => {
     console.log('Playlist clicked:', playlistId);
     // Add logic to handle playlist click
   };
+
   const handleDeletePlaylist = async (playlistId: string) => {
     try {
+      setDeleteLoading(playlistId); // Set delete loading state
       const token = localStorage.getItem('user__token');
       if (!token) return;
 
@@ -59,14 +62,16 @@ const FavoriteSidebar: React.FC = () => {
     } catch (error) {
       console.error('Error deleting playlist:', error);
       toast.error('An error occurred while deleting the playlist.');
+    } finally {
+      setDeleteLoading(null); // Reset delete loading state
     }
   };
 
-  const handleDeleteMovie = async (playlistId: string, movieId: string) => {
+  const handleDeleteMovie = async (playlistId: string, movieId: string): Promise<void> => {
     try {
       const token = localStorage.getItem('user__token');
       if (!token) return;
-  
+
       await axios.delete(
         `${baseUrl}/api/movies/favorites/deleteMovie`,
         {
@@ -76,7 +81,7 @@ const FavoriteSidebar: React.FC = () => {
           },
         }
       );
-  
+
       setPlaylists((prevPlaylists) =>
         prevPlaylists.map((playlist) =>
           playlist.id === playlistId
@@ -84,13 +89,14 @@ const FavoriteSidebar: React.FC = () => {
             : playlist
         )
       );
-  
+
       toast.success('Movie deleted successfully.');
     } catch (error) {
       console.error('Error deleting movie:', error);
       toast.error('An error occurred while deleting the movie.');
     }
   };
+
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -114,7 +120,7 @@ const FavoriteSidebar: React.FC = () => {
           className="drawer-overlay"
         ></label>
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          <span className="text-teal-700 text-3xl font-semibold">
+          <span className="text-teal-700 text-2xl font-semibold">
             <span className="text-teal-500">{playlists.length} </span>
             Playlists 💗
           </span>
@@ -141,8 +147,22 @@ const FavoriteSidebar: React.FC = () => {
                 <button
                   onClick={() => handleDeletePlaylist(playlist.id)}
                   className="ml-4 text-red-500 hover:text-red-700"
+                  disabled={deleteLoading === playlist.id} // Disable button while loading
                 >
-                  Delete
+                  {deleteLoading === playlist.id ? (
+                    <Oval
+                      height={20}
+                      width={20}
+                      color="#4fa94d"
+                      visible={true}
+                      ariaLabel="oval-loading"
+                      secondaryColor="#4fa94d"
+                      strokeWidth={2}
+                      strokeWidthSecondary={2}
+                    />
+                  ) : (
+                    'Delete'
+                  )}
                 </button>
               </li>
             ))

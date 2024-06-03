@@ -15,7 +15,7 @@ interface Playlist {
 interface FavCardProps {
   playlist: Playlist;
   onPlaylistClick: (playlistId: string) => void;
-  onDeleteMovie: (playlistId: string, movieId: string) => void;
+  onDeleteMovie: (playlistId: string, movieId: string) => Promise<void>;
 }
 
 interface Movie {
@@ -32,6 +32,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [visibility, setVisibility] = useState(playlist.visibility);
+  const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
 
   const handlePlaylistClick = () => {
     setShowMovies(true);
@@ -58,6 +59,15 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
     } catch (error) {
       console.error('Error updating visibility:', error);
       toast.error('An error occurred while updating visibility.'); // Display error toast
+    }
+  };
+
+  const handleDeleteMovie = async (movieId: string) => {
+    setDeleteLoading(movieId);
+    try {
+      await onDeleteMovie(playlist.id, movieId);
+    } finally {
+      setDeleteLoading(null);
     }
   };
 
@@ -88,7 +98,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
   }, [showMovies, playlist.imdbIDs]);
 
   return (
-    <div className="group relative flex flex-col gap-4 p-4 border border-gray-700 shadow-lg rounded-lg bg-gradient-to-br from-gray-800 to-black text-white transform transition-transform hover:scale-105 hover:shadow-2xl mb-6">
+    <div className="group mt-3 mb-0 relative flex flex-col gap-4 p-4 border border-gray-700 shadow-lg rounded-lg bg-gradient-to-br from-gray-800 to-black text-white transform transition-transform hover:scale-105 hover:shadow-2xl mb-6">
       <div className="flex items-center gap-5 justify-between">
         <span className="text-2xl font-semibold cursor-pointer hover:text-blue-400 transition-colors" onClick={handlePlaylistClick}>
           {playlist.playlistName}
@@ -143,10 +153,24 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
                   <span className="text-sm text-gray-400">{movie.Year}</span>
                 </div>
                 <button
-                  onClick={() => onDeleteMovie(playlist.id, movie.imdbID)}
+                  onClick={() => handleDeleteMovie(movie.imdbID)}
                   className="ml-auto text-red-500 hover:text-red-700"
+                  disabled={deleteLoading === movie.imdbID} // Disable button while loading
                 >
-                  Delete
+                  {deleteLoading === movie.imdbID ? (
+                    <Oval
+                      height={20}
+                      width={20}
+                      color="#4fa94d"
+                      visible={true}
+                      ariaLabel="oval-loading"
+                      secondaryColor="#4fa94d"
+                      strokeWidth={2}
+                      strokeWidthSecondary={2}
+                    />
+                  ) : (
+                    'Delete'
+                  )}
                 </button>
               </div>
             ))
