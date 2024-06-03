@@ -35,6 +35,7 @@ This project is a Movie Library Web Application that allows users to sign in, se
   - *Express.js*
   - *MongoDB*
   - *JWT* for authentication
+  - *Redis* for caching
 
 - *Hosting:*
   - *Frontend*: Hosted on Netlify
