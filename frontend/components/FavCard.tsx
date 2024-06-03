@@ -33,6 +33,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
   const [error, setError] = useState<string | null>(null);
   const [visibility, setVisibility] = useState(playlist.visibility);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const [visibilityLoading, setVisibilityLoading] = useState(false); // State for visibility loading
 
   const handlePlaylistClick = () => {
     setShowMovies(true);
@@ -44,6 +45,7 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
   };
 
   const handleVisibilityChange = async (newVisibility: boolean) => {
+    setVisibilityLoading(true); // Start visibility loading
     try {
       const response = await axios.put(
         `${baseUrl}/api/movies/favorites/updateVisibility/${playlist.id}`,
@@ -59,6 +61,8 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
     } catch (error) {
       console.error('Error updating visibility:', error);
       toast.error('An error occurred while updating visibility.'); // Display error toast
+    } finally {
+      setVisibilityLoading(false); // End visibility loading
     }
   };
 
@@ -122,9 +126,22 @@ const FavCard: React.FC<FavCardProps> = ({ playlist, onPlaylistClick, onDeleteMo
               className="sr-only"
               checked={visibility}
               onChange={() => handleVisibilityChange(!visibility)}
+              disabled={visibilityLoading} // Disable input while loading
             />
             <div className={`dot absolute left-0 top-0 bg-white w-6 h-6 rounded-full transition-transform ${visibility ? 'transform translate-x-6' : ''}`}></div>
           </div>
+          {visibilityLoading && (
+            <div className='ml-5'><Oval
+              height={20}
+              width={20}
+              color="#4fa94d"
+              visible={true}
+              ariaLabel="oval-loading"
+              secondaryColor="#4fa94d"
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            /></div>
+          )}
         </label>
       </div>
       {showMovies && (
