@@ -67,6 +67,8 @@ This project is a Movie Library Web Application that allows users to sign in, se
    - MONGODB_URI=your_mongodb_uri
    - JWT_SECRET=your_jwt_secret
    - OMDB_API_KEY=your_omdb_api_key
+   - UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
+   - UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token
    
 
 4. Start the backend server:
