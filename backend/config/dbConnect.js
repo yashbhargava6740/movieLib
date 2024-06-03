@@ -9,7 +9,7 @@ const connectDB = async () => {
     console.log("DB Connected Successfully ✅");
     return con;
   } catch (e) {
-    console.log(`Authentication to database failed ❗`);
+    console.log(`Authentication to database failed ❗ ${e}`);
     process.exit(1);
   }
 };
