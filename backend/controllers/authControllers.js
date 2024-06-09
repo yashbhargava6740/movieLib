@@ -50,8 +50,9 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: 'Invalid Credentials' });
     }
-    await redis.set(validUser._id, JSON.stringify(validUser));
-    await redis.expire(validUser._id,3600);
+    await redis.set((validUser._id).toString(), JSON.stringify(validUser));
+    await redis.expire((validUser._id).toString(),3600);
+    // console.log("Setting cache while login ", (validUser._id).toString());
     const { _id, ...userInfo } = validUser._doc;
     userInfo.password = undefined;
     
