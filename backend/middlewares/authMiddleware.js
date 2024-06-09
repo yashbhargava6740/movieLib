@@ -18,7 +18,9 @@ const protect = asyncHandler(async (req, res, next) => {
             else {
                 const user = await USER.findOne({_id}).select();
                 req.user = user;
+                // console.log("Setting cache", _id);
                 await redis.set(_id, JSON.stringify(user));
+                await redis.expire(_id,3600);
             }
             next();
         }
